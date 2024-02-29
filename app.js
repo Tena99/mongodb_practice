@@ -2,35 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
-const connect = require("./connect");
+const connect = require("./lib/connect");
 const Note = require("./models/Note");
 const User = require("./models/User");
+const index = require("./routes");
 
 app.use(express.json());
 
-app.get("/", async (req, res) => {
-  await connect();
-  const notes = await Note.find();
-
-  if (!notes.length) {
-    return res.json({ message: "note not found" });
-  }
-
-  return res.json(notes);
-});
-
-app.post("/", async (req, res) => {
-  await connect();
-
-  const content = req.body;
-  try {
-    await Note.create(content);
-    res.status(201).json({ message: "Document created successfully!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+app.use("/", index);
 
 app.get("/:noteId", async (req, res) => {
   await connect();
