@@ -9,6 +9,6 @@ const usersSchema = new Schema(
   { versionKey: false }
 );
 
-const User = mongoose.models.User || mongoose.model("User", noteSchema);
+const User = mongoose.models.User || mongoose.model("User", usersSchema);
 
 module.exports = User;

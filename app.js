@@ -48,6 +48,36 @@ app.get("/:noteId", async (req, res) => {
   }
 });
 
+app.post("/:user", async (req, res) => {
+  await connect();
+
+  const { user } = req.params;
+
+  if (user) {
+    let { _id: userId } = (await User.findOne({ name: user })) || {
+      _id: null,
+    };
+
+    if (!userId) {
+      const { _id: newUserId } = (await User.create({ name: user })) || {
+        _id: null,
+      };
+
+      userId = newUserId;
+    }
+
+    const { content } = req.body;
+
+    if (content) {
+      const { _id } = await Note.create({ content, user: userId });
+      res.json({ _id, message: "Note was successfully created" });
+    } else {
+      res.json({ message: "Note is not created. Check the content" });
+    }
+  }
+  res.send("No user");
+});
+
 const server = app.listen(port, () =>
   console.log(`Express app listening on port ${port}!`)
 );
