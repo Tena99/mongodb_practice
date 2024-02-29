@@ -75,7 +75,6 @@ app.post("/:user", async (req, res) => {
       res.json({ message: "Note is not created. Check the content" });
     }
   }
-  res.send("No user");
 });
 
 const server = app.listen(port, () =>
